@@ -34,3 +34,4 @@ script = ExtResource("1_ig7tw")
 noise = SubResource("FastNoiseLite_0xm2m")
 
 [node name="Ball" parent="." instance=ExtResource("4_1bvp3")]
+transform = Transform3D(1.04119, 0, 0, 0, 1.04119, 0, 0, 0, 1.04119, 0, 18.4688, 0)

@@ -31,7 +31,7 @@ func generate():
 		vertex.y = get_noise_y(vertex.x, vertex.z)
 		data.set_vertex(i, vertex)
 		
-	array_plane.clear_surfaces()
+		array_plane.clear_surfaces()
 	data.commit_to_surface(array_plane)
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	surface.create_from(array_plane, 0)
@@ -43,6 +43,9 @@ func generate():
 	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	#mesh.add_to_group("NavSource") # (Optional) Used for navigation
 	add_child(mesh)
+	mesh.global_rotate(Vector3.LEFT, 60)
+	#mesh.global_transform.basis.z = Vector3(0.0, sqrt(3.0) / 2.0, 1.0 / 2.0).normalized()
+	#mesh.global_transform.basis.y = Vector3(0.0, sqrt(3.0) / 2.0, 1.0 / 2.0).normalized()
 	
 func get_noise_y(x: float, z: float) -> float:
 	var value := noise.get_noise_2d(x, z)
