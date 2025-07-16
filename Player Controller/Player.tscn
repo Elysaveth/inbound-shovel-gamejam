@@ -6,7 +6,7 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_sydjo"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_0eju6"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_uw63c"]
 _surfaces = [{
 "aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
 "format": 34359742471,
@@ -30,7 +30,7 @@ shape = SubResource("SphereShape3D_sydjo")
 [node name="MeshGenerator" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00122333, 0.0107062, 0.00733471)
 visible = false
-mesh = SubResource("ArrayMesh_0eju6")
+mesh = SubResource("ArrayMesh_uw63c")
 script = ExtResource("2_uw63c")
 subdivisions = 8
 metadata/_custom_type_script = "uid://bujksj14jwcn1"
