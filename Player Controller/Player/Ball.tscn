@@ -7,7 +7,7 @@
 [sub_resource type="SphereShape3D" id="1"]
 
 [node name="Ball" type="RigidBody3D"]
-mass = 100.0
+mass = 10000.0
 physics_material_override = ExtResource("4")
 angular_damp = 1.0
 script = ExtResource("1")
@@ -20,8 +20,9 @@ mesh = ExtResource("3")
 shape = SubResource("1")
 
 [node name="CameraRig" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.844586, 0, 0, 0, 0.425073, 0, 0, 0)
 
 [node name="Camera" type="Camera3D" parent="CameraRig"]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2.86603, 3.5)
+transform = Transform3D(1, 0, 0, 0, 0.694881, 0.651051, 0, -1.44875, 1.17728, 0, 2.86603, 3.5)
 
 [node name="FloorCheck" type="RayCast3D" parent="."]

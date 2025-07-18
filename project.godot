@@ -15,6 +15,10 @@ run/main_scene="uid://ca2ohitgbymdo"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+[debug]
+
+gdscript/warnings/integer_division=0
+
 [display]
 
 window/size/viewport_width=1920
@@ -60,3 +64,4 @@ jump={
 [physics]
 
 3d/physics_engine="Jolt Physics"
+3d/default_gravity=4.9
