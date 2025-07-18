@@ -32,6 +32,9 @@ const size := 256.0
 var pick: Vector3
 
 func _ready() -> void:
+	for child in get_children():
+		remove_child(child)
+		child.queue_free()
 	create_trimesh_collision()
 
 func get_height(x: float, y: float) -> float:

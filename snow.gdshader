@@ -1,22 +1,31 @@
 shader_type spatial;
 
-uniform float height = 64.0;
-uniform sampler2D color_gradient;
-uniform sampler2D normal_map;
-
-void vertex() {
-	// Called for every vertex the material is visible on.
-}
+uniform sampler2D snow_albedo : source_color;
+uniform sampler2D snow_normal;
+uniform sampler2D snow_roughness;
+uniform sampler2D dirt_albedo : source_color;
+uniform sampler2D dirt_normal;
+uniform sampler2D dirt_roughness;
+uniform float uv_scale = 1.0;
+uniform float snow_height = 1.0;
 
 void fragment() {
-	vec4 world_vertex = INV_VIEW_MATRIX * vec4(VERTEX, 1.0);
-	vec3 model_vertex = (inverse(MODEL_MATRIX) * world_vertex).xyz;
-	float gradient_uv = (model_vertex.y / height) + 0.5;
-	ALBEDO = texture(color_gradient, vec2(gradient_uv)).rgb;
-	NORMAL_MAP = texture(normal_map, UV).xyz;
+	vec2 uv = UV * uv_scale;
+	vec3 snow_a = texture(snow_albedo, uv).rgb;
+	vec3 snow_n = texture(snow_normal, uv).rgb;
+	float snow_r = texture(snow_roughness, uv).r;
+	vec3 dirt_a = texture(dirt_albedo, uv).rgb;
+	vec3 dirt_n = texture(dirt_normal, uv).rgb;
+	float dirt_r = texture(dirt_roughness, uv).r;
+	
+	float snow_mask = COLOR.r;
+	
+	ALBEDO = mix(dirt_a, snow_a, snow_mask);
+	NORMAL = mix(dirt_n, snow_n, snow_mask);
+	ROUGHNESS = mix(dirt_r, snow_r, snow_mask);
 }
 
-//void light() {
-//	// Called for every pixel for every light affecting the material.
-//	// Uncomment to replace the default light processing function with this one.
-//}
+void vertex() {
+	float snow_mask = COLOR.r;
+	VERTEX.y += snow_mask * snow_height;
+}

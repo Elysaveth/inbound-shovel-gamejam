@@ -1,0 +1,42 @@
+[gd_scene load_steps=9 format=3 uid="uid://euwgu8v4h404"]
+
+[ext_resource type="Script" uid="uid://c3gpmwigg8rpb" path="res://Player Controller/Player/player.gd" id="1_be5u2"]
+[ext_resource type="Shader" uid="uid://cilgv2l8rwhei" path="res://Player Controller/Player/ball.gdshader" id="2_be5u2"]
+[ext_resource type="Texture2D" uid="uid://c66io40pcvnxl" path="res://Textures/Snow007A_4K-PNG/Snow007A_4K-PNG_Color.png" id="3_18bws"]
+[ext_resource type="Texture2D" uid="uid://c5mkpqxkjhbmk" path="res://Textures/Snow007A_4K-PNG/Snow007A_4K-PNG_NormalGL.png" id="4_3enrd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s4kx8"]
+render_priority = 0
+shader = ExtResource("2_be5u2")
+shader_parameter/height = 64.0
+shader_parameter/color_gradient = ExtResource("3_18bws")
+shader_parameter/normal_map = ExtResource("4_3enrd")
+
+[sub_resource type="SphereMesh" id="SphereMesh_iqmef"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_be5u2"]
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_iqmef"]
+
+[node name="Player" type="RigidBody3D"]
+script = ExtResource("1_be5u2")
+
+[node name="Ball" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+material_override = SubResource("ShaderMaterial_s4kx8")
+mesh = SubResource("SphereMesh_iqmef")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("SphereShape3D_be5u2")
+
+[node name="CameraRig" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.533362, 0.726909, 0, -0.728053, -0.532524, 0.00593138, 0.0898634, -0.000430346)
+shape = SubResource("SeparationRayShape3D_iqmef")
+spring_length = 3.0
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(-1, 7.81602e-08, -4.56564e-09, -8.39849e-08, -1.05515, 0.338136, 2.16426e-08, 0.338692, 1.05682, 0, 0, 0)
+
+[node name="FloorCheck" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)

@@ -18,7 +18,7 @@ extends MeshInstance3D
 @export var mesh_resolution : int = 2
 
 @export_group("Noise Config")
-@export var noise : FastNoiseLite
+@export var noise := FastNoiseLite.new()
 @export var noise_modifier : int = 40
 		
 var array_mesh: ArrayMesh
@@ -33,9 +33,9 @@ func regenerate_mesh() -> void:
 		array_mesh = ArrayMesh.new()
 		mesh = array_mesh
 	array_mesh.clear_surfaces()
-	var surface_array := create_plane(subdivisions, 0, Vector3.UP, Vector3(0,0,0), Vector2(1,1))
-	#var surface_array := create_sphere(subdivisions)
-	#var surface_array := create_cube(subdivisions)
+	#var surface_array := create_plane(subdivisions, 0, Vector3.UP, Vector3(0,0,0), Vector2(1,1))
+	var surface_array := create_sphere(subdivisions, Vector2(1.0, 1.0))
+	#var surface_array := create_cube(subdivisions, Vector2(1.0, 1.0))
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, surface_array)
 	
 func generate_plane(subdiv: int, index: int, dir: Vector3, center: Vector3, size: Vector2) -> MeshInstance3D:
