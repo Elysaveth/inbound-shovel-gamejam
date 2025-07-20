@@ -151,12 +151,9 @@ transform = Transform3D(-1, 7.81602e-08, -4.56564e-09, -8.39849e-08, -1.05515, 0
 
 [node name="FloorCheck" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+target_position = Vector3(0, -0.62, 0)
 
 [node name="Escarabajo" parent="." instance=ExtResource("6_vosef")]
-transform = Transform3D(-0.0774978, -5.19777e-10, 6.7551e-09, -4.67257e-09, 0.060053, -0.0489851, -4.90599e-09, -0.0489851, -0.060053, 0.00372815, 0.467828, -0.336073)
+transform = Transform3D(0.0774978, 0, 0, 0, 0.077268, 0.00596309, 0, -0.00596309, 0.077268, 0.00372815, 0.536504, -0.0940734)
 
-[node name="AnimationPlayer2" type="AnimationPlayer" parent="Escarabajo"]
-libraries = {
-&"": SubResource("AnimationLibrary_2ltnq")
-}
-autoplay = "Esqueleto_001Action"
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
