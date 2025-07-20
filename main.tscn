@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bwk33y1y1xqb3" path="res://Textures/snow_02_4k.gltf/textures/snow_02_rough_4k.jpg" id="9_2cqfq"]
 [ext_resource type="Script" uid="uid://euvi0cucb8rq" path="res://snow_path.gd" id="12_ycdy4"]
 [ext_resource type="Texture2D" uid="uid://bugmjcecpslks" path="res://Textures/radial-gradient.png" id="13_w48qg"]
-[ext_resource type="PackedScene" uid="uid://da1lv37u8i0fx" path="res://control.tscn" id="14_w48qg"]
+[ext_resource type="PackedScene" path="res://control.tscn" id="14_w48qg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0xm2m"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
