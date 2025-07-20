@@ -19,6 +19,7 @@ var started: bool = false
 func _ready():
 	$CameraRig.top_level = true
 	$FloorCheck.top_level = true
+	$Escarabajo.top_level = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float):
