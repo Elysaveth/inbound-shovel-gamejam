@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://euwgu8v4h404"]
+[gd_scene load_steps=14 format=3 uid="uid://euwgu8v4h404"]
 
 [ext_resource type="Script" uid="uid://c3gpmwigg8rpb" path="res://Player Controller/Player/player.gd" id="1_be5u2"]
 [ext_resource type="Shader" uid="uid://cilgv2l8rwhei" path="res://Player Controller/Player/ball.gdshader" id="2_be5u2"]
@@ -131,6 +131,8 @@ _data = {
 &"Esqueleto_001Action": SubResource("Animation_0awbp")
 }
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vosef"]
+
 [node name="Player" type="RigidBody3D"]
 script = ExtResource("1_be5u2")
 
@@ -173,5 +175,11 @@ libraries = {
 &"": SubResource("AnimationLibrary_2ltnq")
 }
 autoplay = "Esqueleto_001Action"
+
+[node name="RigidBody3D" type="RigidBody3D" parent="Escarabajo"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Escarabajo/RigidBody3D"]
+transform = Transform3D(1.44994, -0.012034, -0.00504479, -0.00416354, 0.104618, -1.44622, 0.0123665, 1.44617, 0.10458, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_vosef")
 
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

@@ -1,9 +1,12 @@
 extends RigidBody3D
 
-@export var impact_gameover := 50.0
+signal game_over
+signal paused
+
+@export var impact_gameover := 1.5
 
 @export_group("Movement")
-@export var rolling_speed : float = 40.0
+@export var rolling_speed : float = 20.0
 var rolling_force := rolling_speed
 var is_running := false
 
@@ -17,10 +20,13 @@ var new_angular_v_x : float
 var new_angular_v_z : float
 
 var started: bool = false
+var pause: bool = false
 
 var beetle_pos: Vector3
 var prev_speed: Vector3
-var on_air: bool = false
+var linear_speed: Vector3
+var angular_speed: Vector3
+
 
 func _ready():
 	$CameraRig.top_level = true
@@ -29,11 +35,25 @@ func _ready():
 	$Escarabajo.top_level = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	contact_monitor = true
+	max_contacts_reported = 500
 	
 
 func _physics_process(delta: float):
 	prev_speed = linear_velocity
 	$FloorCheck.global_transform.origin = global_transform.origin
+	
+	# Mouse
+	if Input.is_action_just_pressed("ui_cancel"):
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			player_freeze()
+			paused.emit()
+			
+	if not started and not Input.is_action_just_pressed("ui_cancel"):
+		if Input.is_anything_pressed():
+			started = true
 
 	# Camera follow
 	$CameraRig.global_transform.origin = lerp(
@@ -60,17 +80,6 @@ func _physics_process(delta: float):
 	$Escarabajo.global_basis.x.y = 0
 	$Escarabajo.global_basis.x = $Escarabajo.global_basis.x.normalized() * 0.077
 
-
-	# Mouse
-	if Input.is_action_just_pressed("ui_cancel"):
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			
-	if not started and not Input.is_action_just_pressed("ui_cancel"):
-		if Input.is_anything_pressed():
-			started = true
 			
 	# GAMEPLAY
 	if started:
@@ -95,8 +104,12 @@ func _physics_process(delta: float):
 		#game_process(delta)
 
 
-func game_over():
-	queue_free()
+func gameover():
+	$Ball.free()
+	$Collision.free()
+	$Escarabajo/AnimationPlayer2.free()
+	game_over.emit()
+	#queue_free()
 
 func move_ball(delta: float) -> void:
 	var oldCameraPos = $CameraRig.global_transform.origin
@@ -162,9 +175,31 @@ func ball_movement(delta: float) -> void:
 	angular_velocity = angular_velocity.clamp(angular_velocity.normalized() * -20, angular_velocity.normalized() * 20)
 
 
+func player_freeze() -> void:
+	pause = true
+	linear_speed = linear_velocity
+	linear_velocity = Vector3.ZERO
+	angular_speed = angular_velocity
+	angular_velocity = Vector3.ZERO
+	set_physics_process(false)
+	PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 0)
+	
+	
+func player_unfreeze() -> void:
+	pause = false
+	set_physics_process(true)
+	PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, -490)
+	linear_velocity = linear_speed
+	angular_velocity = angular_speed
+
 func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:
-	print("Collision")
-	var impact = prev_speed.length() - linear_velocity.length()
-	print(impact)
-	if impact > impact_gameover:
-		game_over()
+	if not pause:
+		print("Collision")
+		var impact = prev_speed.length() - linear_velocity.length()
+		print(impact)
+		if impact > impact_gameover:
+			gameover()
+
+
+func _on_control_resumed() -> void:
+	player_unfreeze()

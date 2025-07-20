@@ -1,0 +1,127 @@
+[gd_scene load_steps=3 format=3 uid="uid://da1lv37u8i0fx"]
+
+[ext_resource type="Script" uid="uid://bi7gt6m4cpwom" path="res://control.gd" id="1_sq1y8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ylg2k"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.906879, 0.769652, 0.679462, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_sq1y8")
+
+[node name="Info" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -272.0
+offset_top = 39.0
+offset_right = -43.0
+offset_bottom = 102.0
+grow_horizontal = 0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ylg2k")
+
+[node name="Label" type="Label" parent="Info"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.5
+offset_top = -22.5
+offset_right = 46.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "Score: 100 "
+
+[node name="pause_overlay" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0.28, 0.28, 0.28, 0.356863)
+
+[node name="menu" type="VBoxContainer" parent="pause_overlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -445.0
+offset_top = -170.0
+offset_right = 446.0
+offset_bottom = 266.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="resume" type="Button" parent="pause_overlay/menu"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 60
+text = "Resume"
+
+[node name="retry" type="Button" parent="pause_overlay/menu"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 60
+text = "Restart"
+
+[node name="menu" type="Button" parent="pause_overlay/menu"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 60
+text = "Menu"
+
+[node name="quit" type="Button" parent="pause_overlay/menu"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 60
+text = "Quit"
+
+[node name="Label" type="Label" parent="pause_overlay"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -813.0
+offset_top = 183.0
+offset_right = 802.0
+offset_bottom = 320.0
+grow_horizontal = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 100
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="pause_overlay/menu/resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="pause_overlay/menu/retry" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="pause_overlay/menu/menu" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="pause_overlay/menu/quit" to="." method="_on_quit_pressed"]
