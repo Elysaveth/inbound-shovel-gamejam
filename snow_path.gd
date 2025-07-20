@@ -19,6 +19,6 @@ func _process(_delta: float) -> void:
 
 	$SnowPaintBrush.global_transform.origin.x = paintbrush_position.x
 	$SnowPaintBrush.global_transform.origin.y = paintbrush_position.y
-	$SnowPaintBrush.draw()
+
 	print(player_pos)
 	print($SnowPaintBrush.global_transform.origin)
