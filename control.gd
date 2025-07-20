@@ -1,12 +1,25 @@
 extends Control
 
 signal resumed
+var paused := false
+
+func _process(delta: float) -> void:
+	if paused:
+		if Input.is_action_just_pressed("ui_cancel"):
+			if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				_on_resume_pressed()
+
 
 func _on_player_paused() -> void:
 	$pause_overlay.visible = true
+	await get_tree().create_timer(0.1).timeout
+	paused = true
+	
 
 
 func _on_resume_pressed() -> void:
+	paused = false
 	$pause_overlay.visible = false
 	resumed.emit()
 
