@@ -62,8 +62,8 @@ func get_height(x: float, y: float) -> float:
 	var current_height = noise.get_noise_2d(x, y) * height - distance + 1
 	if current_height > pick.y:
 		pick = Vector3(x, current_height, y)
-	#return current_height
-	return 0
+	return current_height
+	#return 0
 	
 func get_normal(x: float, y: float) -> Vector3:
 	var epsilon := size / resolution

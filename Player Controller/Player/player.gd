@@ -1,5 +1,7 @@
 extends RigidBody3D
 
+@export var impact_gameover := 50.0
+
 @export_group("Movement")
 @export var rolling_speed : float = 40.0
 var rolling_force := rolling_speed
@@ -17,6 +19,8 @@ var new_angular_v_z : float
 var started: bool = false
 
 var beetle_pos: Vector3
+var prev_speed: Vector3
+var on_air: bool = false
 
 func _ready():
 	$CameraRig.top_level = true
@@ -26,6 +30,8 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float):
+	prev_speed = linear_velocity
+
 	# Camera follow
 	$CameraRig.global_transform.origin = lerp(
 		$CameraRig.global_transform.origin, 
@@ -39,7 +45,7 @@ func _physics_process(delta: float):
 	)
 	if ($CameraRig.global_transform.origin - $".".global_transform.origin).length() > 0.1:
 		$CameraRig.look_at($".".global_transform.origin, Vector3.DOWN)
-	#$CameraRig.global_transform.origin.y = global_transform.origin.y + 0.5
+	$CameraRig.global_transform.origin.y = global_transform.origin.y + 0.5
 
 	# Mouse
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -58,14 +64,14 @@ func _physics_process(delta: float):
 			rolling_force = rolling_force * 1.5
 			is_running = false
 
-		if ($CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig/Camera3D.global_transform.basis.x.z != 0):
+		var total_plane_size = $CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z
+		if (total_plane_size != 0):
 			fordward_orientation = Vector2(
-				$CameraRig/Camera3D.global_transform.basis.x.x / ($CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z),
-				$CameraRig/Camera3D.global_transform.basis.x.z / ($CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z)
+				$CameraRig/Camera3D.global_transform.basis.x.x / total_plane_size,
+				$CameraRig/Camera3D.global_transform.basis.x.z / total_plane_size
 			)
 
-		if Input.is_action_pressed("move_forward"):
-			angular_velocity.x = rolling_force / 10.0
+		move_ball(delta)
 		#ball_movement(delta)
 		#camera_movement()
 		#game_process(delta)
@@ -76,6 +82,21 @@ func _physics_process(delta: float):
 			apply_impulse(Vector3(), Vector3.UP*100)
 
 		is_running = Input.is_action_pressed("sprint")
+
+
+func game_over():
+	queue_free()
+
+func move_ball(delta: float) -> void:
+	var oldCameraPos = $CameraRig.global_transform.origin
+	var ballPos = global_transform.origin
+	var newCameraPos = lerp(oldCameraPos, ballPos, 0.1)
+	$CameraRig.global_transform.origin = newCameraPos
+	var input_dir = Input.get_vector("move_forward", "move_back", "move_right", "move_left")
+	var camera_forward = $CameraRig.global_transform.basis.z.normalized()
+
+	angular_velocity = angular_velocity.lerp((Vector3.UP.cross(camera_forward).normalized() * rolling_force * input_dir.x), delta * 5)
+	angular_velocity = angular_velocity.lerp((camera_forward.normalized() * rolling_force * input_dir.y), delta * 5)
 
 
 func camera_movement() -> void:
@@ -118,8 +139,16 @@ func ball_movement(delta: float) -> void:
 
 	elif Input.is_action_pressed("move_right"):
 		angular_velocity.x = angular_velocity.x * \
-		(1 + abs(sideways_orientation.y) * rolling_force * delta * sign(sideways_orientation.y))
+		(1 + abs(fordward_orientation.y) * rolling_force * delta * sign(fordward_orientation.y))
 		angular_velocity.z = angular_velocity.z * \
-		(1 + abs(sideways_orientation.x) * rolling_force * delta * -sign(sideways_orientation.x))
+		(1 + abs(fordward_orientation.x) * rolling_force * delta * -sign(fordward_orientation.x))
 		
 	angular_velocity = angular_velocity.clamp(angular_velocity.normalized() * -20, angular_velocity.normalized() * 20)
+
+
+func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:
+	print("Collision")
+	var impact = prev_speed.length() - linear_velocity.length()
+	print(impact)
+	if impact > impact_gameover:
+		game_over()
