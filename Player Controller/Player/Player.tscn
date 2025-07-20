@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://euwgu8v4h404"]
+[gd_scene load_steps=11 format=3 uid="uid://euwgu8v4h404"]
 
 [ext_resource type="Script" uid="uid://c3gpmwigg8rpb" path="res://Player Controller/Player/player.gd" id="1_be5u2"]
 [ext_resource type="Shader" uid="uid://cilgv2l8rwhei" path="res://Player Controller/Player/ball.gdshader" id="2_be5u2"]
 [ext_resource type="Texture2D" uid="uid://c66io40pcvnxl" path="res://Textures/Snow007A_4K-PNG/Snow007A_4K-PNG_Color.png" id="3_18bws"]
 [ext_resource type="Texture2D" uid="uid://c5mkpqxkjhbmk" path="res://Textures/Snow007A_4K-PNG/Snow007A_4K-PNG_NormalGL.png" id="4_3enrd"]
 [ext_resource type="Texture2D" uid="uid://eaql0kdoeg1k" path="res://Textures/Snow007A_4K-PNG/Snow007A_4K-PNG_Roughness.png" id="5_3enrd"]
+[ext_resource type="PackedScene" uid="uid://otv7xy0lwuy" path="res://Models/Escarabajo/Escarabajo.blend" id="6_vosef"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s4kx8"]
 render_priority = 0
@@ -44,3 +45,6 @@ transform = Transform3D(-1, 7.81602e-08, -4.56564e-09, -8.39849e-08, -1.05515, 0
 
 [node name="FloorCheck" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Escarabajo" parent="." instance=ExtResource("6_vosef")]
+transform = Transform3D(0.0774978, 0, 0, 0, 0.0774978, 0, 0, 0, 0.0774978, 0.00372815, 0.64854, 0.0166136)
