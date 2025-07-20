@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://d37wqhy7ei3rq"
-path="res://.godot/imported/Escarabajo.glb-a009b99bf3682ebdaaac141857b73d04.scn"
+uid="uid://bhfttevc6xbth"
+path="res://.godot/imported/Escarabajo2.glb-53f533a7d8bd37d19de38f66bca75461.scn"
 
 [deps]
 
-source_file="res://Models/Escarabajo/Escarabajo.glb"
-dest_files=["res://.godot/imported/Escarabajo.glb-a009b99bf3682ebdaaac141857b73d04.scn"]
+source_file="res://Models/Escarabajo/Escarabajo2.glb"
+dest_files=["res://.godot/imported/Escarabajo2.glb-53f533a7d8bd37d19de38f66bca75461.scn"]
 
 [params]
 
