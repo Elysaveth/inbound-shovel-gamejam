@@ -55,7 +55,9 @@ func _physics_process(delta: float):
 				$CameraRig/Camera3D.global_transform.basis.x.z / ($CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z)
 			)
 
-		ball_movement(delta)
+		if Input.is_action_pressed("move_forward"):
+			angular_velocity.x = rolling_force / 10.0
+		#ball_movement(delta)
 		#camera_movement()
 		#game_process(delta)
 
