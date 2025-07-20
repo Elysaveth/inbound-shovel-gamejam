@@ -28,8 +28,9 @@ func _physics_process(delta: float):
 		global_transform.origin,
 		0.1
 	)
-	if $CameraRig.global_transform.origin != $".".global_transform.origin:
+	if ($CameraRig.global_transform.origin - $".".global_transform.origin).length() > 0.1:
 		$CameraRig.look_at($".".global_transform.origin, Vector3.DOWN)
+	#$CameraRig.global_transform.origin.y = global_transform.origin.y + 0.5
 
 	# Mouse
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -48,7 +49,13 @@ func _physics_process(delta: float):
 			rolling_force = rolling_force * 1.5
 			is_running = false
 
-		#ball_movement(delta)
+		if ($CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig/Camera3D.global_transform.basis.x.z != 0):
+			fordward_orientation = Vector2(
+				$CameraRig/Camera3D.global_transform.basis.x.x / ($CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z),
+				$CameraRig/Camera3D.global_transform.basis.x.z / ($CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z)
+			)
+
+		ball_movement(delta)
 		#camera_movement()
 		#game_process(delta)
 
@@ -74,18 +81,6 @@ func camera_movement() -> void:
 			Vector3(linear_velocity.z, 0, -linear_velocity.x).normalized(),
 			look_sensitivity * (clampf(linear_velocity.length(), 0.1, 1.1) - 0.1)
 		)
-		
-	#Camera follow ball
-	if ($CameraRig.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z != 0):
-		fordward_orientation = Vector2(
-			$CameraRig.global_transform.basis.x.x / ($CameraRig.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z),
-			$CameraRig.global_transform.basis.x.z / ($CameraRig.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z)
-		)
-	if ($CameraRig.global_transform.basis.z.x + $CameraRig.global_transform.basis.z.z != 0):
-		sideways_orientation = Vector2(
-			$CameraRig.global_transform.basis.z.x / ($CameraRig.global_transform.basis.z.x + $CameraRig.global_transform.basis.z.z),
-			$CameraRig.global_transform.basis.z.z / ($CameraRig.global_transform.basis.z.x + $CameraRig.global_transform.basis.z.z)
-		)
 
 func ball_movement(delta: float) -> void:
 	if Input.is_action_pressed("move_forward"):
@@ -105,15 +100,15 @@ func ball_movement(delta: float) -> void:
 		print(sideways_orientation)
 		print(angular_velocity)
 		angular_velocity.x = angular_velocity.x * \
-		(1 + abs(sideways_orientation.x) * rolling_force * delta * sign(sideways_orientation.x))
+		(1 + abs(fordward_orientation.y) * rolling_force * delta * -sign(fordward_orientation.y))
 		angular_velocity.z = angular_velocity.z * \
-		(1 + abs(sideways_orientation.y) * rolling_force * delta * sign(sideways_orientation.y))
+		(1 + abs(fordward_orientation.x) * rolling_force * delta * sign(sideways_orientation.x))
 		print(angular_velocity)
 
 	elif Input.is_action_pressed("move_right"):
 		angular_velocity.x = angular_velocity.x * \
-		(1 + abs(sideways_orientation.x) * rolling_force * delta * sign(sideways_orientation.x))
-		angular_velocity.z = angular_velocity.z * \
 		(1 + abs(sideways_orientation.y) * rolling_force * delta * sign(sideways_orientation.y))
+		angular_velocity.z = angular_velocity.z * \
+		(1 + abs(sideways_orientation.x) * rolling_force * delta * -sign(sideways_orientation.x))
 		
 	angular_velocity = angular_velocity.clamp(angular_velocity.normalized() * -20, angular_velocity.normalized() * 20)

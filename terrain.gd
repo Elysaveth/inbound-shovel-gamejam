@@ -30,6 +30,8 @@ const size := 256.0
 		#material_override.set_shader_parameter("height", height * 8)
 		update_mesh()
 		
+@export var viewport : NodePath
+		
 var pick: Vector3
 
 func _ready() -> void:
@@ -47,6 +49,9 @@ func _ready() -> void:
 	shader_material.set_shader_parameter("dirt_albedo", preload("res://Textures/rock_boulder_dry/textures/rock_boulder_dry_diff_4k.jpg"))
 	shader_material.set_shader_parameter("dirt_normal", preload("res://Textures/rock_boulder_dry/textures/rock_boulder_dry_nor_gl_4k.jpg"))
 	shader_material.set_shader_parameter("dirt_roughness", preload("res://Textures/rock_boulder_dry/textures/rock_boulder_dry_arm_4k.jpg"))
+	var viewport_texture = ViewportTexture.new()
+	viewport_texture.viewport_path = viewport
+	shader_material.set_shader_parameter("dynamic_snow_mask", viewport_texture)
 	shader_material.set_shader_parameter("uv_scale", 10.0)
 	shader_material.set_shader_parameter("snow_height", 0.5)
 
@@ -57,8 +62,8 @@ func get_height(x: float, y: float) -> float:
 	var current_height = noise.get_noise_2d(x, y) * height - distance + 1
 	if current_height > pick.y:
 		pick = Vector3(x, current_height, y)
-	return current_height
-	#return 0
+	#return current_height
+	return 0
 	
 func get_normal(x: float, y: float) -> Vector3:
 	var epsilon := size / resolution

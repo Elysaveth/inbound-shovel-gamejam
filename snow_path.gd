@@ -9,6 +9,7 @@ func _ready() -> void:
 	player = get_node(player_path)
 	if not player:
 		set_process(false)
+	scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
 
 func _process(_delta: float) -> void:
 	var half_world_extents := world_extents.size * 0.5
@@ -20,5 +21,5 @@ func _process(_delta: float) -> void:
 	$SnowPaintBrush.global_transform.origin.x = paintbrush_position.x
 	$SnowPaintBrush.global_transform.origin.y = paintbrush_position.y
 
-	print(player_pos)
-	print($SnowPaintBrush.global_transform.origin)
+	#print(player_pos)
+	#print($SnowPaintBrush.global_transform.origin)

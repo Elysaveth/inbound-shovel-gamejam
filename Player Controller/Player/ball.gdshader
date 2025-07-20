@@ -13,7 +13,7 @@ void fragment() {
 	vec4 world_vertex = INV_VIEW_MATRIX * vec4(VERTEX, 1.0);
 	vec3 model_vertex = (inverse(MODEL_MATRIX) * world_vertex).xyz;
 	float gradient_uv = (model_vertex.y / height) + 0.5;
-	
+
 	ALBEDO = texture(snow_albedo, UV).rgb;
 	NORMAL_MAP = texture(snow_normal, UV).xyz;
 	ROUGHNESS = texture(snow_roughness, UV).r;
