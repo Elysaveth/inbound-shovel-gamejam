@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://sgyoy2hgk3iu"
 path.s3tc="res://.godot/imported/Escarabajo2_Material Base Color.png-28c512ed5b05f78c51c30e339e0bc1b8.s3tc.ctex"
+path.etc2="res://.godot/imported/Escarabajo2_Material Base Color.png-28c512ed5b05f78c51c30e339e0bc1b8.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://Models/Escarabajo/Escarabajo2_Material Base Color.png"
-dest_files=["res://.godot/imported/Escarabajo2_Material Base Color.png-28c512ed5b05f78c51c30e339e0bc1b8.s3tc.ctex"]
+dest_files=["res://.godot/imported/Escarabajo2_Material Base Color.png-28c512ed5b05f78c51c30e339e0bc1b8.s3tc.ctex", "res://.godot/imported/Escarabajo2_Material Base Color.png-28c512ed5b05f78c51c30e339e0bc1b8.etc2.ctex"]
 
 [params]
 

@@ -5,5 +5,5 @@ func _ready():
 
 
 func _on_player_game_over() -> void:
-	pass
+	$music.free()
 	

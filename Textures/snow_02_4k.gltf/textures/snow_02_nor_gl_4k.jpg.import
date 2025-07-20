@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://it65xfopo5cj"
 path.s3tc="res://.godot/imported/snow_02_nor_gl_4k.jpg-1791959c3144a54e0e7800ada7608053.s3tc.ctex"
+path.etc2="res://.godot/imported/snow_02_nor_gl_4k.jpg-1791959c3144a54e0e7800ada7608053.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Textures/snow_02_4k.gltf/textures/snow_02_nor_gl_4k.jpg"
-dest_files=["res://.godot/imported/snow_02_nor_gl_4k.jpg-1791959c3144a54e0e7800ada7608053.s3tc.ctex"]
+dest_files=["res://.godot/imported/snow_02_nor_gl_4k.jpg-1791959c3144a54e0e7800ada7608053.s3tc.ctex", "res://.godot/imported/snow_02_nor_gl_4k.jpg-1791959c3144a54e0e7800ada7608053.etc2.ctex"]
 
 [params]
 
