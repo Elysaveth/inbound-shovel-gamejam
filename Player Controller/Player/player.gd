@@ -16,9 +16,12 @@ var new_angular_v_z : float
 
 var started: bool = false
 
+var beetle_pos: Vector3
+
 func _ready():
 	$CameraRig.top_level = true
 	$FloorCheck.top_level = true
+	beetle_pos = $Escarabajo.global_transform.origin
 	$Escarabajo.top_level = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -28,6 +31,11 @@ func _physics_process(delta: float):
 		$CameraRig.global_transform.origin, 
 		global_transform.origin,
 		0.1
+	)
+	$Escarabajo.global_transform.origin = Vector3(
+		global_transform.origin.x + beetle_pos.x,
+		global_transform.origin.y + beetle_pos.y - 1.72,
+		global_transform.origin.z + beetle_pos.z
 	)
 	if ($CameraRig.global_transform.origin - $".".global_transform.origin).length() > 0.1:
 		$CameraRig.look_at($".".global_transform.origin, Vector3.DOWN)

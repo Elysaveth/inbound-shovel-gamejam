@@ -27,16 +27,14 @@ rings = 18
 script = ExtResource("1_be5u2")
 
 [node name="Ball" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 material_override = SubResource("ShaderMaterial_s4kx8")
 mesh = SubResource("SphereMesh_iqmef")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("SphereShape3D_be5u2")
 
 [node name="CameraRig" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.533362, 0.726909, 0, -0.728053, -0.532524, 0.00593138, 0.0898634, -0.000430346)
+transform = Transform3D(1, 0, 0, 0, -0.533362, 0.726909, 0, -0.728053, -0.532524, 0.006, 0, 0)
 shape = SubResource("SeparationRayShape3D_iqmef")
 spring_length = 3.0
 
@@ -47,4 +45,4 @@ transform = Transform3D(-1, 7.81602e-08, -4.56564e-09, -8.39849e-08, -1.05515, 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Escarabajo" parent="." instance=ExtResource("6_vosef")]
-transform = Transform3D(0.0774978, 0, 0, 0, 0.0774978, 0, 0, 0, 0.0774978, 0.00372815, 0.64854, 0.0166136)
+transform = Transform3D(0.0774978, 0, 0, 0, 0.077268, 0.00596309, 0, -0.00596309, 0.077268, 0.00372815, 0.536504, -0.0940734)
