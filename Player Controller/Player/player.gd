@@ -3,7 +3,7 @@ extends RigidBody3D
 signal game_over
 signal paused
 
-@export var impact_gameover := 1.5
+@export var impact_gameover := 2.0
 
 @export_group("Movement")
 @export var rolling_speed : float = 20.0
@@ -35,7 +35,7 @@ func _ready():
 	$Escarabajo.top_level = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	contact_monitor = true
-	max_contacts_reported = 500
+	max_contacts_reported = 5
 	
 
 func _physics_process(delta: float):
@@ -46,6 +46,7 @@ func _physics_process(delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			player_freeze()
@@ -83,6 +84,7 @@ func _physics_process(delta: float):
 			
 	# GAMEPLAY
 	if started:
+		print(angular_velocity)
 		rolling_force = rolling_speed
 		
 		# Sprint
@@ -102,9 +104,13 @@ func _physics_process(delta: float):
 		#ball_movement(delta)
 		#camera_movement()
 		#game_process(delta)
+	if pause:
+		linear_velocity = Vector3.ZERO
+		angular_velocity = Vector3.ZERO
 
 
 func gameover():
+	print("GAME OVER!!!")
 	$Ball.free()
 	$Collision.free()
 	$Escarabajo/AnimationPlayer2.free()
@@ -176,21 +182,27 @@ func ball_movement(delta: float) -> void:
 
 
 func player_freeze() -> void:
+	set_physics_process(false)
+	PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 0)
 	pause = true
 	linear_speed = linear_velocity
 	linear_velocity = Vector3.ZERO
 	angular_speed = angular_velocity
 	angular_velocity = Vector3.ZERO
-	set_physics_process(false)
-	PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 0)
+	print("Paused")
+	
 	
 	
 func player_unfreeze() -> void:
 	pause = false
-	set_physics_process(true)
-	PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, -490)
 	linear_velocity = linear_speed
 	angular_velocity = angular_speed
+	prev_speed = linear_speed
+	set_physics_process(true)
+	PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 4.9)
+	global_position.y += 0.5
+	print("Unpaused")
+
 
 func _on_body_shape_entered(body_rid: RID, body: Node, body_shape_index: int, local_shape_index: int) -> void:
 	if not pause:

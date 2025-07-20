@@ -3,6 +3,8 @@ extends MeshInstance3D
 
 const size := 256.0
 
+@export var seed: int = 31
+
 #@export_group("Parameters")
 @export_range(1.0,2.0, 0.01) var slope := 2.0:
 	set(new_slope):
@@ -17,7 +19,7 @@ const size := 256.0
 	set(new_resolution):
 		resolution = new_resolution
 		update_mesh()
-@export var noise: FastNoiseLite:
+@export var noise: FastNoiseLite = FastNoiseLite.new():
 	set(new_noise):
 		noise = new_noise
 		update_mesh()
@@ -38,6 +40,10 @@ func _ready() -> void:
 	for child in get_children():
 		remove_child(child)
 		child.queue_free()
+	# Random seed
+	var seed = randi()
+	noise.seed = seed
+	update_mesh()
 	create_trimesh_collision()
 	var shader_material = ShaderMaterial.new()
 	var shader = preload("res://snow.gdshader")
