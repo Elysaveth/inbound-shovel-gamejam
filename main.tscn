@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://ca2ohitgbymdo"]
+[gd_scene load_steps=23 format=4 uid="uid://ca2ohitgbymdo"]
 
 [ext_resource type="Script" uid="uid://dg4a1e3mvtpqr" path="res://ProceduralGeneration/terrain_generation.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://glabb6020s76" path="res://main.gd" id="1_lquwl"]
@@ -31,7 +31,10 @@ glow_enabled = true
 seed = 1
 frequency = 0.005
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yaehf"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ycdy4"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w48qg"]
 render_priority = 0
 shader = ExtResource("3_1bvp3")
 shader_parameter/snow_albedo = ExtResource("7_w48qg")
@@ -40,8 +43,8 @@ shader_parameter/snow_roughness = ExtResource("9_2cqfq")
 shader_parameter/dirt_albedo = ExtResource("4_efxa6")
 shader_parameter/dirt_normal = ExtResource("5_dg77c")
 shader_parameter/dirt_roughness = ExtResource("6_ycdy4")
-shader_parameter/uv_scale = 1.0
-shader_parameter/snow_height = 1.0
+shader_parameter/uv_scale = 10.0
+shader_parameter/snow_height = 0.5
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_vivmo"]
 _surfaces = [{
@@ -77,7 +80,8 @@ script = ExtResource("1_ig7tw")
 noise = SubResource("FastNoiseLite_0xm2m")
 
 [node name="Terrain" type="MeshInstance3D" parent="."]
-material_override = SubResource("ShaderMaterial_yaehf")
+material_override = SubResource("StandardMaterial3D_ycdy4")
+material_overlay = SubResource("ShaderMaterial_w48qg")
 mesh = SubResource("ArrayMesh_vivmo")
 script = ExtResource("3_h2yge")
 resolution = 256
@@ -93,9 +97,22 @@ shape = SubResource("ConcavePolygonShape3D_2cqfq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72213, 0)
 
 [node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+size = Vector2i(256, 256)
 render_target_clear_mode = 2
 render_target_update_mode = 4
 script = ExtResource("12_ycdy4")
+player_path = NodePath("../Player")
+world_extents = Rect2(0, 0, 256, 256)
 
-[node name="Sprite2D" type="Sprite2D" parent="SubViewport"]
+[node name="ColorRect" type="ColorRect" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SnowPaintBrush" type="Sprite2D" parent="SubViewport"]
+position = Vector2(128, 128)
+scale = Vector2(0.01, 0.01)
 texture = ExtResource("13_w48qg")

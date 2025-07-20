@@ -40,7 +40,6 @@ func generate_mesh() -> MeshInstance3D:
 	plane_mesh.size = Vector2(size_width, size_depth)
 	plane_mesh.subdivide_depth = size_depth * mesh_resolution
 	plane_mesh.subdivide_width = size_width * mesh_resolution
-	plane_mesh.material = preload("res://ProceduralGeneration/Materials/TerrainMaterial.tres")
 	
 	# Create surface
 	var surface := SurfaceTool.new()

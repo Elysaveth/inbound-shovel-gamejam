@@ -23,10 +23,11 @@ const size := 256.0
 		update_mesh()
 		if noise:
 			noise.changed.connect(update_mesh)
+
 @export_range(4.0, 128.0, 4.0) var height := 64.0:
 	set(new_height):
 		height = new_height
-		material_override.set_shader_parameter("height", height * 8)
+		#material_override.set_shader_parameter("height", height * 8)
 		update_mesh()
 		
 var pick: Vector3
@@ -36,7 +37,21 @@ func _ready() -> void:
 		remove_child(child)
 		child.queue_free()
 	create_trimesh_collision()
+	var shader_material = ShaderMaterial.new()
+	var shader = preload("res://snow.gdshader")
+	shader_material.set_shader_parameter("albedo", Color(1, 0, 0, 1))
+	shader_material.shader = shader
+	shader_material.set_shader_parameter("snow_albedo", preload("res://Textures/snow_02_4k.gltf/textures/snow_02_diff_4k.jpg"))
+	shader_material.set_shader_parameter("snow_normal", preload("res://Textures/snow_02_4k.gltf/textures/snow_02_nor_gl_4k.jpg"))
+	shader_material.set_shader_parameter("snow_roughness", preload("res://Textures/snow_02_4k.gltf/textures/snow_02_rough_4k.jpg"))
+	shader_material.set_shader_parameter("dirt_albedo", preload("res://Textures/rock_boulder_dry/textures/rock_boulder_dry_diff_4k.jpg"))
+	shader_material.set_shader_parameter("dirt_normal", preload("res://Textures/rock_boulder_dry/textures/rock_boulder_dry_nor_gl_4k.jpg"))
+	shader_material.set_shader_parameter("dirt_roughness", preload("res://Textures/rock_boulder_dry/textures/rock_boulder_dry_arm_4k.jpg"))
+	shader_material.set_shader_parameter("uv_scale", 10.0)
+	shader_material.set_shader_parameter("snow_height", 0.5)
 
+	material_overlay = shader_material
+	
 func get_height(x: float, y: float) -> float:
 	var distance: float = Vector2().distance_to(Vector2(x, y)) / slope
 	var current_height = noise.get_noise_2d(x, y) * height - distance + 1
@@ -85,4 +100,10 @@ func update_mesh() -> void:
 	var array_mesh := ArrayMesh.new()
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, plane_arrays)
 	mesh = array_mesh
+	
+	# Paint red for snow coverage
+	var temp_material = StandardMaterial3D.new()
+	temp_material.albedo_color = Color(1, 0, 0)
+	#temp_material.set_shader_parameter("albedo", Color(1, 0, 0, 1)) # Full red
+	self.material_override = temp_material
 	print(pick)

@@ -28,7 +28,8 @@ func _physics_process(delta: float):
 		global_transform.origin,
 		0.1
 	)
-	$CameraRig.look_at($".".global_transform.origin, Vector3.DOWN)
+	if $CameraRig.global_transform.origin != $".".global_transform.origin:
+		$CameraRig.look_at($".".global_transform.origin, Vector3.DOWN)
 
 	# Mouse
 	if Input.is_action_just_pressed("ui_cancel"):

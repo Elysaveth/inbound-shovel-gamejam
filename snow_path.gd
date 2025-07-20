@@ -11,10 +11,14 @@ func _ready() -> void:
 		set_process(false)
 
 func _process(_delta: float) -> void:
-	var half_world_extents = world_extents.size * 0.5
-	var player_pos = Vector2(player.global_transform.origin.x, player.global_transform.origin.z)
+	var half_world_extents := world_extents.size * 0.5
+	var player_pos := Vector2(player.global_transform.origin.x, player.global_transform.origin.z)
 
-	player_pos += half_world_extents
-	var paintbrush_position = player_pos / world_extents.size
-	
-	$SnowPaintBrush.position = paintbrush_position * size
+	var paintbrush_position: Vector2 = player_pos + half_world_extents
+	#var paintbrush_position: Vector2 = player_pos / world_extents.size
+
+	$SnowPaintBrush.global_transform.origin.x = paintbrush_position.x
+	$SnowPaintBrush.global_transform.origin.y = paintbrush_position.y
+	$SnowPaintBrush.draw()
+	print(player_pos)
+	print($SnowPaintBrush.global_transform.origin)
