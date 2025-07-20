@@ -174,10 +174,4 @@ libraries = {
 }
 autoplay = "Esqueleto_001Action"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Escarabajo/AnimationPlayer2/AnimationPlayer/AnimationPlayer"]
-libraries = {
-&"": SubResource("AnimationLibrary_2ltnq")
-}
-autoplay = "Esqueleto_001Action"
-
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

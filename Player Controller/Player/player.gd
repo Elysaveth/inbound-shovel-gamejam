@@ -28,9 +28,12 @@ func _ready():
 	beetle_pos = $Escarabajo.global_transform.origin
 	$Escarabajo.top_level = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	contact_monitor = true
+	
 
 func _physics_process(delta: float):
 	prev_speed = linear_velocity
+	$FloorCheck.global_transform.origin = global_transform.origin
 
 	# Camera follow
 	$CameraRig.global_transform.origin = lerp(
@@ -38,14 +41,25 @@ func _physics_process(delta: float):
 		global_transform.origin,
 		0.1
 	)
+	if ($CameraRig.global_transform.origin - $".".global_transform.origin).length() > 0.1:
+		$CameraRig.look_at($".".global_transform.origin, Vector3.DOWN)
+	$CameraRig.global_transform.origin.y = global_transform.origin.y + 0.5
+
+
+	# Beetle follow
 	$Escarabajo.global_transform.origin = Vector3(
 		global_transform.origin.x + beetle_pos.x,
 		global_transform.origin.y + beetle_pos.y - 1.72,
 		global_transform.origin.z + beetle_pos.z
 	)
-	if ($CameraRig.global_transform.origin - $".".global_transform.origin).length() > 0.1:
-		$CameraRig.look_at($".".global_transform.origin, Vector3.DOWN)
-	$CameraRig.global_transform.origin.y = global_transform.origin.y + 0.5
+	# Beetle direction
+	$Escarabajo.global_basis.z = angular_velocity.normalized().rotated(Vector3.DOWN, -PI / 2)
+	$Escarabajo.global_basis.z.y = 0
+	$Escarabajo.global_basis.z = $Escarabajo.global_basis.z.normalized() * 0.077
+	$Escarabajo.global_basis.x = angular_velocity.normalized().rotated(Vector3.DOWN, -PI) * 0.077
+	$Escarabajo.global_basis.x.y = 0
+	$Escarabajo.global_basis.x = $Escarabajo.global_basis.x.normalized() * 0.077
+
 
 	# Mouse
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -58,12 +72,16 @@ func _physics_process(delta: float):
 		if Input.is_anything_pressed():
 			started = true
 			
+	# GAMEPLAY
 	if started:
 		rolling_force = rolling_speed
+		
+		# Sprint
 		if is_running:
 			rolling_force = rolling_force * 1.5
 			is_running = false
 
+		# Get fordward direction of ball
 		var total_plane_size = $CameraRig/Camera3D.global_transform.basis.x.x + $CameraRig.global_transform.basis.x.z
 		if (total_plane_size != 0):
 			fordward_orientation = Vector2(
@@ -75,13 +93,6 @@ func _physics_process(delta: float):
 		#ball_movement(delta)
 		#camera_movement()
 		#game_process(delta)
-
-		$FloorCheck.global_transform.origin = global_transform.origin
-		
-		if Input.is_action_just_pressed("jump") and $FloorCheck.is_colliding():
-			apply_impulse(Vector3(), Vector3.UP*100)
-
-		is_running = Input.is_action_pressed("sprint")
 
 
 func game_over():
@@ -97,6 +108,11 @@ func move_ball(delta: float) -> void:
 
 	angular_velocity = angular_velocity.lerp((Vector3.UP.cross(camera_forward).normalized() * rolling_force * input_dir.x), delta * 5)
 	angular_velocity = angular_velocity.lerp((camera_forward.normalized() * rolling_force * input_dir.y), delta * 5)
+	
+	if Input.is_action_just_pressed("jump") and $FloorCheck.is_colliding():
+		apply_impulse(Vector3(), Vector3.UP*100)
+
+	is_running = Input.is_action_pressed("sprint")
 
 
 func camera_movement() -> void:
