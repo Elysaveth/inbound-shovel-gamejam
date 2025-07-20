@@ -27,30 +27,31 @@ var prev_speed: Vector3
 var linear_speed: Vector3
 var angular_speed: Vector3
 
+var score := 0.0
+
 
 func _ready():
 	$CameraRig.top_level = true
-	$FloorCheck.top_level = true
 	beetle_pos = $Escarabajo.global_transform.origin
 	$Escarabajo.top_level = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	contact_monitor = true
 	max_contacts_reported = 5
 	
-
-func _physics_process(delta: float):
-	prev_speed = linear_velocity
-	$FloorCheck.global_transform.origin = global_transform.origin
-	
+func _process(delta: float) -> void:
 	# Mouse
 	if Input.is_action_just_pressed("ui_cancel"):
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			
-		else:
+		if not Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
+			#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		#else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			player_freeze()
 			paused.emit()
+
+func _physics_process(delta: float):
+	prev_speed = linear_velocity
+	rolling_force = rolling_speed
+	score += linear_velocity.length() * delta
 			
 	if not started and not Input.is_action_just_pressed("ui_cancel"):
 		if Input.is_anything_pressed():
@@ -110,6 +111,7 @@ func _physics_process(delta: float):
 
 
 func gameover():
+	set_physics_process(false)
 	print("GAME OVER!!!")
 	$Ball.free()
 	$Collision.free()
@@ -124,12 +126,13 @@ func move_ball(delta: float) -> void:
 	$CameraRig.global_transform.origin = newCameraPos
 	var input_dir = Input.get_vector("move_forward", "move_back", "move_right", "move_left")
 	var camera_forward = $CameraRig.global_transform.basis.z.normalized()
+	
+	if input_dir.y < 0:
+		input_dir.y *= input_dir.y * input_dir.y
 
 	angular_velocity = angular_velocity.lerp((Vector3.UP.cross(camera_forward).normalized() * rolling_force * input_dir.x), delta * 5)
 	angular_velocity = angular_velocity.lerp((camera_forward.normalized() * rolling_force * input_dir.y), delta * 5)
-	
-	if Input.is_action_just_pressed("jump") and $FloorCheck.is_colliding():
-		apply_impulse(Vector3(), Vector3.UP*100)
+
 
 	is_running = Input.is_action_pressed("sprint")
 
